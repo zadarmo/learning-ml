@@ -10,13 +10,12 @@
 
 ### 目标
 
-学习几种经典的线性模型
+学习几种经典的回归模型
 
-### 暂时可忽略内容
-
-无
-
-
+- 一元线性回归
+- 多元线性回归
+- 对数几率回归
+- 线性判别分析
 
 # 笔记
 
@@ -60,32 +59,41 @@ $$
 $$
 y=wx+b+\epsilon 
 $$
-其中$\epsilon $为不受控制的随机误差（有多种因素共同决定），通常假设其服从均值为0的正态分布$\epsilon \sim N(0,\sigma^2)$（高斯提出的，也可以用中心极限定理解释）。所以$\epsilon $的概率密度函数为
+
+其中$\epsilon$为不受控制的随机误差（有多种因素共同决定），通常假设其服从均值为0的正态分布$\epsilon \sim N(0,\sigma^2)$（高斯提出的，也可以用中心极限定理解释）。所以$\epsilon$的概率密度函数为
 $$
 p(\epsilon )=\frac {1}{\sqrt{2\pi \sigma}}exp(-\frac {\epsilon ^2}{2\sigma^2})
 $$
-若将$\epsilon $用$y-(wx+b)$等价替换可得，
+若将$\epsilon$用$y-(wx+b)$等价替换可得，
 $$
 p(y )=\frac {1}{\sqrt{2\pi \sigma}}exp(-\frac {(y-(wx+b))^2}{2\sigma^2})
 $$
+
 上式可以看做$y\sim N(wx+b,\sigma^2)$。下面便可以用**极大似然估计**来估计$w$和$b$的值。似然函数为
 $$
 L(w,b)=\prod_{i=1}^mp(y_i)=\prod_{i=1}^m \frac {1}{\sqrt{2\pi \sigma}}exp(-\frac {(y_i-(wx_i+b))^2}{2\sigma^2})
 $$
 
-$$ {aligned}
+两边同时取对数：
+
+$$\begin{aligned}
 ln{L(w,b)}&=\sum_{i=1}^mln\frac {1}{\sqrt{2\pi \sigma}}exp(-\frac {(y_i-(wx_i+b))^2}{2\sigma^2})  \\
 &=\sum_{i=1}^mln \frac {1}{\sqrt{2\pi \sigma}}+\sum_{i=1}^mlnexp(-\frac {(y_i-(wx_i+b))^2}{2\sigma^2}) \\
 &=mln \frac {1}{\sqrt{2\pi \sigma}}-\frac{1}{2\sigma^2}\sum_{i=1}^m(y_i-(wx_i+b))^2
-$$ {aligned}
+\end{aligned}$$
 
-最大化$lnL(w,b)$等价于最小化$\sum_{i=1}^m(y_i-(wx_i+b))^2$，即
+
+最大化$lnL(w, b)$等价于最小化$\sum_{i=1}^m(y_i-(wx_i+b))^2$，即
+
 $$
 (w^*,b^*)={\underset {(w,b)}{\operatorname {arg\,max} }}\,lnL(w,b)={\underset {(w,b)}{\operatorname {arg\,min}}\sum_{i=1}^m(y_i-(wx_i+b))^2}
 $$
+
 可以看出，**最小二乘法**和**极大似然**估计推导的**优化目标相同**。
 
 ### 4. 求解过程推导
+
+首先证明目标函数是凸函数，然后根据凸充分性定理求解参数$(w^*, b^*)$
 
 #### （1）证明目标函数是凸函数
 
@@ -96,8 +104,8 @@ $$
 
 要证明目标函数是凸函数，只需证明目标函数的Hessian矩阵是半正定的。证明过程如下：
 
-![img](file:///C:\Users\destiny\Documents\Tencent Files\240412375\Image\C2C\Image1\06EDC2F510A77B46B23CA4CA8BD1A262.jpg![image-20211016003606264](C:\Users\destiny\AppData\Roaming\Typora\typora-user-images\image-20211016003606264.png)
 
+![](attachments/证明一元线性回归目标函数为凸函数.png)
 
 
 ### （2）求解$w,b$
@@ -108,7 +116,7 @@ $$
 
 所以，根据$E(w,b)$梯度为0，求解$w,b$的过程如下：
 
-![image-20211016004932407](C:\Users\destiny\AppData\Roaming\Typora\typora-user-images\image-20211016004932407.png)
+![](attachments/凸充分性定理求解一元线性回归目标函数.png)
 
 ## 二、多元线性回归
 
@@ -120,7 +128,11 @@ $$
 
 推导过程如下：
 
-![image-20211016014234093](C:\Users\destiny\AppData\Roaming\Typora\typora-user-images\image-20211016014234093.png)
+![](attachments/多元线性回归目标函数推导.png)
+
+目标函数向量化：
+
+![](attachments/多元线性回归目标函数向量化.png)
 
 #### 证明损失函数为凸函数
 
@@ -128,7 +140,7 @@ $$
 
 推导过程如下：
 
-![image-20211017192748610](C:\Users\destiny\AppData\Roaming\Typora\typora-user-images\image-20211017192748610.png)
+![](attachments/证明多元线性回归目标函数为凸函数.png)
 
 ### 求解$\hat w$
 
@@ -136,7 +148,7 @@ $$
 
 求解过程如下：
 
-![image-20211017193306695](C:\Users\destiny\AppData\Roaming\Typora\typora-user-images\image-20211017193306695.png)
+![](attachments/2022-11-12-14-12-17.png)
 
 ## 三、对数几率回归
 
@@ -157,7 +169,7 @@ $$
 
 通过极大似然估计推导优化目标，过程如下：
 
-![IMG_20211018_224500](C:\Users\destiny\Documents\Tencent Files\240412375\FileRecv\MobileFile\IMG_20211018_224500.jpg)
+![](attachments/对数几率回归目标函数推导.png)
 
 #### 信息论
 
@@ -169,10 +181,12 @@ $$
 
 ## 四、线性判别分析（LDA）
 
-对于二分类问题来说，LDA是希望找到一个方向，当样本都朝这个方向投影时，
+对于二分类问题来说，LDA是希望找到一个方向（一条直线），当样本都朝这个方向投影时，
 
 - 异类样本中心尽可能远（1）
 - 同类样本方差尽可能小（2）
+
+![](attachments/线性判别分析求解目标示意图.png)
 
 ### 1. 目标函数推导
 
@@ -180,7 +194,7 @@ $$
 
 推导过程如下：
 
-![IMG_20211019_002440](C:\Users\destiny\Documents\Tencent Files\240412375\FileRecv\MobileFile\IMG_20211019_002440.jpg)
+![](attachments/线性判别分析目标函数推导.png)
 
 通过观察发现，目标函数和$\boldsymbol w$的长度没关系。所以不失一般性，可以令分母（分母是一个标量）为1。
 
@@ -190,7 +204,7 @@ $$
 
 推导过程如下：
 
-![IMG_20211019_002505](C:\Users\destiny\Documents\Tencent Files\240412375\FileRecv\MobileFile\IMG_20211019_002505.jpg)
+![](attachments/拉格朗日乘子法求解线性判别分析目标函数.png)
 
 ## 参考资料
 
